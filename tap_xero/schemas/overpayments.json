@@ -1,171 +1,109 @@
 {
-  "type": [
-    "null",
-    "object"
-  ],
+  "type": ["null", "object"],
   "properties": {
     "Type": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     },
     "Contact": {
       "$ref": "contacts"
     },
     "Date": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "format": "date-time"
     },
     "Status": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     },
     "AppliedAmount": {
-      "type": [
-        "null",
-        "number"
-      ],
-      "minimum": -1e+33,
-      "maximum": 1e+33,
-      "multipleOf": 1e-05,
+      "type": ["null", "number"],
+      "minimum": -1e33,
+      "maximum": 1e33,
+      "multipleOf": 1e-5,
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
     },
     "LineAmountTypes": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     },
     "LineItems": {
       "items": {
         "$ref": "line_items"
       },
-      "type": [
-        "null",
-        "array"
-      ]
+      "type": ["null", "array"]
     },
     "SubTotal": {
-      "type": [
-        "null",
-        "number"
-      ],
-      "minimum": -1e+33,
-      "maximum": 1e+33,
-      "multipleOf": 1e-05,
+      "type": ["null", "number"],
+      "minimum": -1e33,
+      "maximum": 1e33,
+      "multipleOf": 1e-5,
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
     },
     "TotalTax": {
-      "type": [
-        "null",
-        "number"
-      ],
-      "minimum": -1e+33,
-      "maximum": 1e+33,
-      "multipleOf": 1e-05,
+      "type": ["null", "number"],
+      "minimum": -1e33,
+      "maximum": 1e33,
+      "multipleOf": 1e-5,
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
     },
     "Total": {
-      "type": [
-        "null",
-        "number"
-      ],
-      "minimum": -1e+33,
-      "maximum": 1e+33,
-      "multipleOf": 1e-05,
+      "type": ["null", "number"],
+      "minimum": -1e33,
+      "maximum": 1e33,
+      "multipleOf": 1e-5,
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
     },
     "UpdatedDateUTC": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "format": "date-time"
     },
     "CurrencyCode": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     },
     "OverpaymentID": {
-      "type": [
-        "string"
-      ]
+      "type": ["string"]
     },
     "CurrencyRate": {
-      "type": [
-        "null",
-        "number"
-      ],
-      "minimum": -1e+33,
-      "maximum": 1e+33,
-      "multipleOf": 1e-06,
+      "type": ["null", "number"],
+      "minimum": -1e33,
+      "maximum": 1e33,
+      "multipleOf": 1e-6,
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
     },
     "RemainingCredit": {
-      "type": [
-        "null",
-        "number"
-      ],
-      "minimum": -1e+33,
-      "maximum": 1e+33,
-      "multipleOf": 1e-05,
+      "type": ["null", "number"],
+      "minimum": -1e33,
+      "maximum": 1e33,
+      "multipleOf": 1e-5,
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
     },
     "Allocations": {
-      "type": [
-        "null",
-        "array"
-      ],
+      "type": ["null", "array"],
       "items": {
         "$ref": "allocations"
       }
     },
     "Payments": {
-      "type": [
-        "null",
-        "array"
-      ],
+      "type": ["null", "array"],
       "items": {
         "$ref": "payments"
       }
     },
     "Reference": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     },
     "HasAttachments": {
-      "type": [
-        "null",
-        "boolean"
-      ]
+      "type": ["null", "boolean"]
     },
     "ID": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     },
     "DateString": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "format": "date-time"
     }
   },

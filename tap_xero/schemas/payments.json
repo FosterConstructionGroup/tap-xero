@@ -1,67 +1,40 @@
 {
-  "type": [
-    "null",
-    "object"
-  ],
+  "type": ["null", "object"],
   "properties": {
     "Date": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "format": "date-time"
     },
     "CurrencyRate": {
-      "type": [
-        "null",
-        "number"
-      ],
-      "minimum": -1e+33,
-      "maximum": 1e+33,
-      "multipleOf": 1e-06,
+      "type": ["null", "number"],
+      "minimum": -1e33,
+      "maximum": 1e33,
+      "multipleOf": 1e-6,
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
     },
     "Amount": {
-      "type": [
-        "null",
-        "number"
-      ],
-      "minimum": -1e+33,
-      "maximum": 1e+33,
-      "multipleOf": 1e-05,
+      "type": ["null", "number"],
+      "minimum": -1e33,
+      "maximum": 1e33,
+      "multipleOf": 1e-5,
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
     },
     "Reference": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     },
     "IsReconciled": {
-      "type": [
-        "null",
-        "boolean"
-      ]
+      "type": ["null", "boolean"]
     },
     "Status": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     },
     "PaymentType": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     },
     "UpdatedDateUTC": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "format": "date-time"
     },
     "Account": {
@@ -71,97 +44,59 @@
       "$ref": "nested_invoice"
     },
     "CreditNote": {
-      "type": [
-        "null",
-        "object"
-      ],
+      "type": ["null", "object"],
       "properties": {
         "CreditNoteNumber": {
-          "type": [
-            "string"
-          ]
+          "type": ["string"]
         }
       },
       "additionalProperties": false
     },
     "Prepayments": {
-      "type": [
-        "null",
-        "array"
-      ],
+      "type": ["null", "array"],
       "items": {
-        "type": [
-          "null",
-          "object"
-        ],
+        "type": ["null", "object"],
         "properties": {
           "PrepaymentID": {
-            "type": [
-              "string"
-            ]
+            "type": ["string"]
           }
         },
         "additionalProperties": false
       }
     },
     "Overpayment": {
-      "type": [
-        "null",
-        "array"
-      ],
+      "type": ["null", "array"],
       "items": {
-        "type": [
-          "null",
-          "object"
-        ],
+        "type": ["null", "object"],
         "properties": {
           "OverpaymentID": {
-            "type": [
-              "string"
-            ]
+            "type": ["string"]
           }
         },
         "additionalProperties": false
       }
     },
     "BankAmount": {
-      "type": [
-        "null",
-        "number"
-      ],
-      "minimum": -1e+33,
-      "maximum": 1e+33,
-      "multipleOf": 1e-05,
+      "type": ["null", "number"],
+      "minimum": -1e33,
+      "maximum": 1e33,
+      "multipleOf": 1e-5,
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
     },
     "HasValidationErrors": {
-      "type": [
-        "null",
-        "boolean"
-      ]
+      "type": ["null", "boolean"]
     },
     "PaymentID": {
-      "type": [
-        "string"
-      ]
+      "type": ["string"]
     },
     "HasAccount": {
-      "type": [
-        "null",
-        "boolean"
-      ]
+      "type": ["null", "boolean"]
     },
     "BatchPaymentID": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     }
   },
-  "tap_schema_dependencies": [
-    "accounts",
-    "nested_invoice"
-  ],
+  "tap_schema_dependencies": ["accounts", "nested_invoice"],
   "additionalProperties": false
 }

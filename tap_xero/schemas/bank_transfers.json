@@ -1,8 +1,5 @@
 {
-  "type": [
-    "null",
-    "object"
-  ],
+  "type": ["null", "object"],
   "properties": {
     "FromBankAccount": {
       "$ref": "accounts"
@@ -11,81 +8,50 @@
       "$ref": "accounts"
     },
     "Amount": {
-      "type": [
-        "null",
-        "number"
-      ],
-      "minimum": -1e+33,
-      "maximum": 1e+33,
-      "multipleOf": 1e-05,
+      "type": ["null", "number"],
+      "minimum": -1e33,
+      "maximum": 1e33,
+      "multipleOf": 1e-5,
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
     },
     "Date": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "format": "date-time"
     },
     "DateString": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "format": "date-time"
     },
     "BankTransferID": {
-      "type": [
-        "string"
-      ]
+      "type": ["string"]
     },
     "CurrencyRate": {
-      "type": [
-        "null",
-        "number"
-      ],
-      "minimum": -1e+33,
-      "maximum": 1e+33,
-      "multipleOf": 1e-06,
+      "type": ["null", "number"],
+      "minimum": -1e33,
+      "maximum": 1e33,
+      "multipleOf": 1e-6,
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
     },
     "FromBankTransactionID": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     },
     "ToBankTransactionID": {
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     },
     "HasAttachments": {
-      "type": [
-        "null",
-        "boolean"
-      ]
+      "type": ["null", "boolean"]
     },
     "CreatedDateUTC": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "format": "date-time"
     },
     "CreatedDateUTCString": {
-      "type": [
-        "null",
-        "string"
-      ],
+      "type": ["null", "string"],
       "format": "date-time"
     }
   },
-  "tap_schema_dependencies": [
-    "accounts"
-  ],
+  "tap_schema_dependencies": ["accounts"],
   "additionalProperties": false
 }

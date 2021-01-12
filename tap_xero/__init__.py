@@ -9,21 +9,17 @@ from .client import XeroClient
 from .context import Context
 
 REQUIRED_CONFIG_KEYS = [
-    "start_date",
     "client_id",
     "client_secret",
     "tenant_id",
     "refresh_token",
-
 ]
 
 LOGGER = singer.get_logger()
 
 BAD_CREDS_MESSAGE = (
-    "Failed to refresh OAuth token using the credentials from both the config and S3. "
-    "The token might need to be reauthorized from the integration's properties "
-    "or there could be another authentication issue. Please attempt to reauthorize "
-    "the integration."
+    "Failed to refresh OAuth token. The token might need to be reauthorized from the integration's properties "
+    "or there could be another authentication issue. Please attempt to reauthorize the integration."
 )
 
 

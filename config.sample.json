@@ -1,0 +1,7 @@
+{
+  "tenant_id": "abcdefghijklmnopqrstuvwxyz1234567890ABCD",
+  "client_id": "abcdefghijklmnopqrstuvwxyz1234567890ABCD",
+  "client_secret": "abcdefghijklmnopqrstuvwxyz1234567890ABCD",
+  "refresh_token": "very_long_token",
+  "start_date": "start_date"
+}

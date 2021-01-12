@@ -24,10 +24,7 @@ class RateLimitException(Exception):
     pass
 
 
-@backoff.on_exception(backoff.expo,
-                      RateLimitException,
-                      max_tries=10,
-                      factor=2)
+@backoff.on_exception(backoff.expo, RateLimitException, max_tries=10, factor=2)
 def _make_request(ctx, tap_stream_id, filter_options=None, attempts=0):
     filter_options = filter_options or {}
     try:
@@ -35,7 +32,9 @@ def _make_request(ctx, tap_stream_id, filter_options=None, attempts=0):
     except HTTPError as e:
         if e.response.status_code == 401:
             if attempts == 1:
-                raise Exception("Received Not Authorized response after credential refresh.") from e
+                raise Exception(
+                    "Received Not Authorized response after credential refresh."
+                ) from e
             ctx.refresh_credentials()
             return _make_request(ctx, tap_stream_id, filter_options, attempts + 1)
 
@@ -45,8 +44,10 @@ def _make_request(ctx, tap_stream_id, filter_options=None, attempts=0):
     assert False
 
 
-class Stream():
-    def __init__(self, tap_stream_id, pk_fields, bookmark_key="UpdatedDateUTC", format_fn=None):
+class Stream:
+    def __init__(
+        self, tap_stream_id, pk_fields, bookmark_key="UpdatedDateUTC", format_fn=None
+    ):
         self.tap_stream_id = tap_stream_id
         self.pk_fields = pk_fields
         self.format_fn = format_fn or (lambda x: x)
@@ -110,6 +111,7 @@ class Journals(Stream):
     """The Journals endpoint is a special case. It has its own way of ordering
     and paging the data. See
     https://developer.xero.com/documentation/api/journals"""
+
     def sync(self, ctx):
         bookmark = [self.tap_stream_id, self.bookmark_key]
         journal_number = ctx.get_bookmark(bookmark) or 0
@@ -132,6 +134,7 @@ class LinkedTransactions(Stream):
     the UpdatedDateUTC timestamp in them. Therefore we must always iterate over
     all of the data, but we can manually omit records based on the
     UpdatedDateUTC property."""
+
     def sync(self, ctx):
         bookmark = [self.tap_stream_id, self.bookmark_key]
         offset = [self.tap_stream_id, "page"]
@@ -143,8 +146,11 @@ class LinkedTransactions(Stream):
             ctx.write_state()
             filter_options = {"page": curr_page_num}
             raw_records = _make_request(ctx, self.tap_stream_id, filter_options)
-            records = [x for x in raw_records
-                       if strptime_with_tz(x[self.bookmark_key]) >= strptime_with_tz(start)]
+            records = [
+                x
+                for x in raw_records
+                if strptime_with_tz(x[self.bookmark_key]) >= strptime_with_tz(start)
+            ]
             if records:
                 self.write_records(records, ctx)
                 max_updated = records[-1][self.bookmark_key]
@@ -175,42 +181,55 @@ all_streams = [
     # parameters
     PaginatedStream("bank_transactions", ["BankTransactionID"]),
     PaginatedStream("contacts", ["ContactID"], format_fn=transform.format_contacts),
-    PaginatedStream("credit_notes", ["CreditNoteID"], format_fn=transform.format_credit_notes),
+    PaginatedStream(
+        "credit_notes", ["CreditNoteID"], format_fn=transform.format_credit_notes
+    ),
     PaginatedStream("invoices", ["InvoiceID"], format_fn=transform.format_invoices),
     PaginatedStream("manual_journals", ["ManualJournalID"]),
-    PaginatedStream("overpayments", ["OverpaymentID"], format_fn=transform.format_over_pre_payments),
-    PaginatedStream("prepayments", ["PrepaymentID"], format_fn=transform.format_over_pre_payments),
+    PaginatedStream(
+        "overpayments", ["OverpaymentID"], format_fn=transform.format_over_pre_payments
+    ),
+    PaginatedStream(
+        "prepayments", ["PrepaymentID"], format_fn=transform.format_over_pre_payments
+    ),
     PaginatedStream("purchase_orders", ["PurchaseOrderID"]),
-
     # JOURNALS STREAM
     # This endpoint is paginated, but in its own special snowflake way.
-    Journals("journals", ["JournalID"], bookmark_key="JournalNumber", format_fn=transform.format_journals),
-
+    Journals(
+        "journals",
+        ["JournalID"],
+        bookmark_key="JournalNumber",
+        format_fn=transform.format_journals,
+    ),
     # NON-PAGINATED STREAMS
     # These endpoints do not support pagination, but do support the Modified At
     # header.
     BookmarkedStream("accounts", ["AccountID"]),
-    BookmarkedStream("bank_transfers", ["BankTransferID"], bookmark_key="CreatedDateUTC"),
+    BookmarkedStream(
+        "bank_transfers", ["BankTransferID"], bookmark_key="CreatedDateUTC"
+    ),
     BookmarkedStream("employees", ["EmployeeID"]),
     BookmarkedStream("expense_claims", ["ExpenseClaimID"]),
     BookmarkedStream("items", ["ItemID"]),
     BookmarkedStream("payments", ["PaymentID"], format_fn=transform.format_payments),
     BookmarkedStream("receipts", ["ReceiptID"], format_fn=transform.format_receipts),
     BookmarkedStream("users", ["UserID"], format_fn=transform.format_users),
-
     # PULL EVERYTHING STREAMS
     # These endpoints do not support the Modified After header (or paging), so
     # we must pull all the data each time.
     Everything("branding_themes", ["BrandingThemeID"]),
-    Everything("contact_groups", ["ContactGroupID"], format_fn=transform.format_contact_groups),
+    Everything(
+        "contact_groups", ["ContactGroupID"], format_fn=transform.format_contact_groups
+    ),
     Everything("currencies", ["Code"]),
     Everything("organisations", ["OrganisationID"]),
     Everything("repeating_invoices", ["RepeatingInvoiceID"]),
     Everything("tax_rates", ["TaxType"]),
     Everything("tracking_categories", ["TrackingCategoryID"]),
-
     # LINKED TRANSACTIONS STREAM
     # This endpoint is not paginated, but can do some manual filtering
-    LinkedTransactions("linked_transactions", ["LinkedTransactionID"], bookmark_key="UpdatedDateUTC"),
+    LinkedTransactions(
+        "linked_transactions", ["LinkedTransactionID"], bookmark_key="UpdatedDateUTC"
+    ),
 ]
 all_stream_ids = [s.tap_stream_id for s in all_streams]
