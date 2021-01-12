@@ -8,7 +8,10 @@
       "type": ["null", "string"]
     },
     "Contact": {
-      "$ref": "contacts"
+      "type": ["null", "object"],
+      "properties": {
+        "ContactId": { "type": ["string"] }
+      }
     },
     "Date": {
       "format": "date-time",
@@ -88,11 +91,13 @@
     "Payments": {
       "type": ["null", "array"],
       "items": {
-        "$ref": "payments"
+        "type": ["null", "object"],
+        "properties": {
+          "PaymentID": {
+            "type": ["string"]
+          }
+        }
       }
-    },
-    "HasAttachments": {
-      "type": ["null", "boolean"]
     },
     "TotalTax": {
       "type": ["null", "number"],
@@ -101,17 +106,8 @@
       "multipleOf": 1e-5,
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
-    },
-    "DateString": {
-      "format": "date-time",
-      "type": ["null", "string"]
     }
   },
-  "tap_schema_dependencies": [
-    "allocations",
-    "contacts",
-    "line_items",
-    "payments"
-  ],
+  "tap_schema_dependencies": ["allocations", "line_items"],
   "additionalProperties": false
 }

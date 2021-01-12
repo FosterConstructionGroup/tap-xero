@@ -14,9 +14,11 @@
       "exclusiveMaximum": true
     },
     "Invoice": {
-      "$ref": "nested_invoice"
+      "type": ["null", "object"],
+      "properties": {
+        "InvoiceId": { "type": ["string"] }
+      }
     }
   },
-  "additionalProperties": false,
-  "tap_schema_dependencies": ["nested_invoice"]
+  "additionalProperties": false
 }

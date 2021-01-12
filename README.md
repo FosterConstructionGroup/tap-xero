@@ -25,7 +25,6 @@ This tap:
   - [Payments](https://developer.xero.com/documentation/api/payments)
   - [Receipts](https://developer.xero.com/documentation/api/receipts)
   - [Users](https://developer.xero.com/documentation/api/users)
-  - [Branding Themes](https://developer.xero.com/documentation/api/branding-themes)
   - [Contact Groups](https://developer.xero.com/documentation/api/contactgroups)
   - [Currencies](https://developer.xero.com/documentation/api/currencies)
   - [Organisations](https://developer.xero.com/documentation/api/organisation)

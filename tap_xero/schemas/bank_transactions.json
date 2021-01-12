@@ -5,7 +5,10 @@
       "type": ["null", "string"]
     },
     "Contact": {
-      "$ref": "contacts"
+      "type": ["null", "object"],
+      "properties": {
+        "ContactId": { "type": ["string"] }
+      }
     },
     "LineItems": {
       "type": ["null", "array"],
@@ -14,16 +17,15 @@
       }
     },
     "BankAccount": {
-      "$ref": "accounts"
+      "type": ["null", "object"],
+      "properties": {
+        "AccountID": { "type": ["string"] }
+      }
     },
     "IsReconciled": {
       "type": ["null", "boolean"]
     },
     "Date": {
-      "type": ["null", "string"],
-      "format": "date-time"
-    },
-    "DateString": {
       "type": ["null", "string"],
       "format": "date-time"
     },
@@ -87,13 +89,10 @@
       "type": ["null", "string"],
       "format": "date-time"
     },
-    "HasAttachments": {
-      "type": ["null", "boolean"]
-    },
     "ExternalLinkProviderName": {
       "type": ["null", "string"]
     }
   },
-  "tap_schema_dependencies": ["accounts", "contacts", "line_items"],
+  "tap_schema_dependencies": ["line_items"],
   "additionalProperties": false
 }

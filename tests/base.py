@@ -10,9 +10,14 @@ import tap_tester.menagerie as menagerie
 def preserve_refresh_token(existing_conns, payload):
     if not existing_conns:
         return payload
-    conn_with_creds = connections.fetch_existing_connection_with_creds(existing_conns[0]['id'])
-    payload['properties']['refresh_token'] = conn_with_creds['credentials']['refresh_token']
+    conn_with_creds = connections.fetch_existing_connection_with_creds(
+        existing_conns[0]["id"]
+    )
+    payload["properties"]["refresh_token"] = conn_with_creds["credentials"][
+        "refresh_token"
+    ]
     return payload
+
 
 class XeroScenarioBase(unittest.TestCase):
     start_dt = datetime(2001, 1, 1, tzinfo=timezone.utc)
@@ -20,22 +25,24 @@ class XeroScenarioBase(unittest.TestCase):
 
     def setUp(self):
         required_env = {
-            "client_id": 'TAP_XERO_CLIENT_ID',
-            "client_secret": 'TAP_XERO_CLIENT_SECRET',
-            "refresh_token": 'TAP_XERO_REFRESH_TOKEN',
-            "tenant_id": 'TAP_XERO_TENANT_ID',
+            "client_id": "TAP_XERO_CLIENT_ID",
+            "client_secret": "TAP_XERO_CLIENT_SECRET",
+            "refresh_token": "TAP_XERO_REFRESH_TOKEN",
+            "tenant_id": "TAP_XERO_TENANT_ID",
         }
         missing_envs = [v for v in required_env.values() if not os.getenv(v)]
         if missing_envs:
             raise Exception("set " + ", ".join(missing_envs))
         self._credentials = {k: os.getenv(v) for k, v in required_env.items()}
-        self.conn_id = connections.ensure_connection(self, payload_hook=preserve_refresh_token)
+        self.conn_id = connections.ensure_connection(
+            self, payload_hook=preserve_refresh_token
+        )
 
     def get_type(self):
         return "platform.xero"
 
     def get_credentials(self):
-        self._credentials["client_secret"] = os.getenv('TAP_XERO_CLIENT_SECRET')
+        self._credentials["client_secret"] = os.getenv("TAP_XERO_CLIENT_SECRET")
         self._credentials["refresh_token"] = "refresh_token"
         self._credentials["access_token"] = "access_token"
         return self._credentials
@@ -60,7 +67,6 @@ class XeroScenarioBase(unittest.TestCase):
             "payments": ["PaymentID"],
             "receipts": ["ReceiptID"],
             "users": ["UserID"],
-            "branding_themes": ["BrandingThemeID"],
             "contact_groups": ["ContactGroupID"],
             "currencies": ["Code"],
             "organisations": ["OrganisationID"],
@@ -123,10 +129,10 @@ class XeroScenarioBase(unittest.TestCase):
 
     def get_properties(self):
         return {
-            "start_date" : self.start_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "client_id": os.getenv('TAP_XERO_CLIENT_ID'),
-            "tenant_id": os.getenv('TAP_XERO_TENANT_ID'),
-            "xero_user_id": os.getenv('TAP_XERO_XERO_USER_ID'),
+            "start_date": self.start_dt.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "client_id": os.getenv("TAP_XERO_CLIENT_ID"),
+            "tenant_id": os.getenv("TAP_XERO_TENANT_ID"),
+            "xero_user_id": os.getenv("TAP_XERO_XERO_USER_ID"),
         }
 
     def get_bookmark_default(self, stream):
@@ -140,15 +146,17 @@ class XeroScenarioBase(unittest.TestCase):
                 return int(bookmark_val)
             return utils.strptime_with_tz(bookmark_val)
         except Exception as e:
-            raise Exception("Couldn't cast (stream:{}) (bk_name:{}) (bk_val:{})"
-                            .format(stream, bookmark_name, bookmark_val)) from e
+            raise Exception(
+                "Couldn't cast (stream:{}) (bk_name:{}) (bk_val:{})".format(
+                    stream, bookmark_name, bookmark_val
+                )
+            ) from e
 
     def check_all_streams_in_catalogs(self, found_catalogs):
         found_catalog_names = {c["tap_stream_id"] for c in found_catalogs}
         diff = self.expected_streams.symmetric_difference(found_catalog_names)
         self.assertEqual(
-            len(diff), 0,
-            msg="discovered schemas do not match: {}".format(diff)
+            len(diff), 0, msg="discovered schemas do not match: {}".format(diff)
         )
         print("discovered schemas are kosher")
 
@@ -156,19 +164,26 @@ class XeroScenarioBase(unittest.TestCase):
         # selected = [menagerie.select_catalog(self.conn_id, c) for c in found_catalogs]
         # menagerie.post_annotated_catalogs(self.conn_id, selected)
         for catalog in found_catalogs:
-            schema = menagerie.get_annotated_schema(self.conn_id, catalog['stream_id'])
+            schema = menagerie.get_annotated_schema(self.conn_id, catalog["stream_id"])
             non_selected_properties = []
             additional_md = []
 
             connections.select_catalog_and_fields_via_metadata(
-                self.conn_id, catalog, schema, additional_md=additional_md,
-                non_selected_fields=non_selected_properties
+                self.conn_id,
+                catalog,
+                schema,
+                additional_md=additional_md,
+                non_selected_fields=non_selected_properties,
             )
 
     def look_for_unexpected_bookmarks(self, bookmarks):
         diff = set(bookmarks).difference(self.expected_bookmarks)
         self.assertEqual(
-            len(diff), 0,
-            msg=("Unexpected bookmarks: {} Expected: {} Actual: {}"
-                 .format(diff, self.expected_bookmarks, bookmarks))
+            len(diff),
+            0,
+            msg=(
+                "Unexpected bookmarks: {} Expected: {} Actual: {}".format(
+                    diff, self.expected_bookmarks, bookmarks
+                )
+            ),
         )

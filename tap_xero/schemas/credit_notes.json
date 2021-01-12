@@ -5,17 +5,16 @@
       "type": ["null", "string"]
     },
     "Contact": {
-      "$ref": "contacts"
+      "type": ["null", "object"],
+      "properties": {
+        "ContactId": { "type": ["string"] }
+      }
     },
     "Date": {
       "format": "date-time",
       "type": ["null", "string"]
     },
     "DueDate": {
-      "format": "date-time",
-      "type": ["null", "string"]
-    },
-    "DueDateString": {
       "format": "date-time",
       "type": ["null", "string"]
     },
@@ -108,20 +107,10 @@
       },
       "type": ["null", "array"]
     },
-    "BrandingThemeID": {
-      "type": ["null", "string"]
-    },
-    "HasAttachments": {
-      "type": ["null", "boolean"]
-    },
-    "DateString": {
-      "format": "date-time",
-      "type": ["null", "string"]
-    },
     "ID": {
       "type": ["null", "string"]
     }
   },
-  "tap_schema_dependencies": ["contacts", "line_items", "allocations"],
+  "tap_schema_dependencies": ["line_items", "allocations"],
   "additionalProperties": false
 }

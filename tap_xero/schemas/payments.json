@@ -38,10 +38,18 @@
       "format": "date-time"
     },
     "Account": {
-      "$ref": "accounts"
+      "type": ["null", "object"],
+      "properties": {
+        "AccountId": {
+          "type": ["string"]
+        }
+      }
     },
     "Invoice": {
-      "$ref": "nested_invoice"
+      "type": ["null", "object"],
+      "properties": {
+        "InvoiceId": { "type": ["string"] }
+      }
     },
     "CreditNote": {
       "type": ["null", "object"],
@@ -84,9 +92,6 @@
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
     },
-    "HasValidationErrors": {
-      "type": ["null", "boolean"]
-    },
     "PaymentID": {
       "type": ["string"]
     },
@@ -97,6 +102,5 @@
       "type": ["null", "string"]
     }
   },
-  "tap_schema_dependencies": ["accounts", "nested_invoice"],
   "additionalProperties": false
 }

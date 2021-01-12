@@ -2,7 +2,10 @@
   "type": ["null", "object"],
   "properties": {
     "Contact": {
-      "$ref": "contacts"
+      "type": ["null", "object"],
+      "properties": {
+        "ContactId": { "type": ["string"] }
+      }
     },
     "Date": {
       "format": "date-time",
@@ -26,9 +29,6 @@
       "items": {
         "$ref": "line_items"
       }
-    },
-    "BrandingThemeID": {
-      "type": ["null", "string"]
     },
     "CurrencyCode": {
       "type": ["null", "string"]
@@ -98,22 +98,11 @@
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
     },
-    "HasAttachments": {
-      "type": ["null", "boolean"]
-    },
     "UpdatedDateUTC": {
       "format": "date-time",
       "type": ["null", "string"]
     },
-    "DeliveryDateString": {
-      "format": "date-time",
-      "type": ["null", "string"]
-    },
     "Type": {
-      "type": ["null", "string"]
-    },
-    "DateString": {
-      "format": "date-time",
       "type": ["null", "string"]
     },
     "HasErrors": {
@@ -121,12 +110,8 @@
     },
     "IsDiscounted": {
       "type": ["null", "boolean"]
-    },
-    "ExpectedArrivalDateString": {
-      "format": "date-time",
-      "type": ["null", "string"]
     }
   },
-  "tap_schema_dependencies": ["contacts", "line_items"],
+  "tap_schema_dependencies": ["line_items"],
   "additionalProperties": false
 }

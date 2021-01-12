@@ -5,7 +5,10 @@
       "type": ["null", "string"]
     },
     "Contact": {
-      "$ref": "contacts"
+      "type": ["null", "object"],
+      "properties": {
+        "ContactId": { "type": ["string"] }
+      }
     },
     "Date": {
       "type": ["null", "string"],
@@ -90,28 +93,21 @@
     "Payments": {
       "type": ["null", "array"],
       "items": {
-        "$ref": "payments"
+        "type": ["null", "object"],
+        "properties": {
+          "PaymentID": {
+            "type": ["string"]
+          }
+        }
       }
     },
     "Reference": {
       "type": ["null", "string"]
     },
-    "HasAttachments": {
-      "type": ["null", "boolean"]
-    },
     "ID": {
       "type": ["null", "string"]
-    },
-    "DateString": {
-      "type": ["null", "string"],
-      "format": "date-time"
     }
   },
-  "tap_schema_dependencies": [
-    "contacts",
-    "line_items",
-    "payments",
-    "allocations"
-  ],
+  "tap_schema_dependencies": ["line_items", "allocations"],
   "additionalProperties": false
 }

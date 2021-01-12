@@ -189,12 +189,8 @@ all_streams = [
     ),
     PaginatedStream("invoices", ["InvoiceID"], format_fn=transform.format_invoices),
     PaginatedStream("manual_journals", ["ManualJournalID"]),
-    PaginatedStream(
-        "overpayments", ["OverpaymentID"], format_fn=transform.format_over_pre_payments
-    ),
-    PaginatedStream(
-        "prepayments", ["PrepaymentID"], format_fn=transform.format_over_pre_payments
-    ),
+    PaginatedStream("overpayments", ["OverpaymentID"]),
+    PaginatedStream("prepayments", ["PrepaymentID"]),
     PaginatedStream("purchase_orders", ["PurchaseOrderID"]),
     # JOURNALS STREAM
     # This endpoint is paginated, but in its own special snowflake way.
@@ -214,13 +210,12 @@ all_streams = [
     BookmarkedStream("employees", ["EmployeeID"]),
     BookmarkedStream("expense_claims", ["ExpenseClaimID"]),
     BookmarkedStream("items", ["ItemID"]),
-    BookmarkedStream("payments", ["PaymentID"], format_fn=transform.format_payments),
+    BookmarkedStream("payments", ["PaymentID"]),
     BookmarkedStream("receipts", ["ReceiptID"], format_fn=transform.format_receipts),
     BookmarkedStream("users", ["UserID"], format_fn=transform.format_users),
     # PULL EVERYTHING STREAMS
     # These endpoints do not support the Modified After header (or paging), so
     # we must pull all the data each time.
-    Everything("branding_themes", ["BrandingThemeID"]),
     Everything(
         "contact_groups", ["ContactGroupID"], format_fn=transform.format_contact_groups
     ),

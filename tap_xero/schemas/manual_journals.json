@@ -52,7 +52,12 @@
           },
           "Tracking": {
             "items": {
-              "$ref": "tracking_categories"
+              "type": ["null", "object"],
+              "properties": {
+                "TrackingCategoryID": {
+                  "type": ["string"]
+                }
+              }
             },
             "type": ["null", "array"]
           }
@@ -66,9 +71,6 @@
     "ShowOnCashBasisReports": {
       "type": ["null", "boolean"]
     },
-    "HasAttachments": {
-      "type": ["null", "boolean"]
-    },
     "UpdatedDateUTC": {
       "type": ["null", "string"],
       "format": "date-time"
@@ -77,6 +79,5 @@
       "type": ["string"]
     }
   },
-  "tap_schema_dependencies": ["tracking_categories"],
   "additionalProperties": false
 }

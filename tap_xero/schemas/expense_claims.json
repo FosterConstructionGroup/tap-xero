@@ -2,12 +2,22 @@
   "type": ["null", "object"],
   "properties": {
     "User": {
-      "$ref": "users"
+      "type": ["null", "object"],
+      "properties": {
+        "UserId": {
+          "type": ["string"]
+        }
+      }
     },
     "Receipts": {
       "type": ["null", "array"],
       "items": {
-        "$ref": "receipts"
+        "type": ["null", "object"],
+        "properties": {
+          "ReceiptID": {
+            "type": ["string"]
+          }
+        }
       }
     },
     "ExpenseClaimID": {
@@ -16,7 +26,12 @@
     "Payments": {
       "type": ["null", "array"],
       "items": {
-        "$ref": "payments"
+        "type": ["null", "object"],
+        "properties": {
+          "PaymentID": {
+            "type": ["string"]
+          }
+        }
       }
     },
     "Status": {
@@ -59,6 +74,5 @@
       "format": "date-time"
     }
   },
-  "tap_schema_dependencies": ["users", "receipts", "payments"],
   "additionalProperties": false
 }

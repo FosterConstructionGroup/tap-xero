@@ -2,10 +2,20 @@
   "type": ["null", "object"],
   "properties": {
     "FromBankAccount": {
-      "$ref": "accounts"
+      "type": ["null", "object"],
+      "properties": {
+        "AccountId": {
+          "type": ["string"]
+        }
+      }
     },
     "ToBankAccount": {
-      "$ref": "accounts"
+      "type": ["null", "object"],
+      "properties": {
+        "AccountId": {
+          "type": ["string"]
+        }
+      }
     },
     "Amount": {
       "type": ["null", "number"],
@@ -16,10 +26,6 @@
       "exclusiveMaximum": true
     },
     "Date": {
-      "type": ["null", "string"],
-      "format": "date-time"
-    },
-    "DateString": {
       "type": ["null", "string"],
       "format": "date-time"
     },
@@ -40,18 +46,10 @@
     "ToBankTransactionID": {
       "type": ["null", "string"]
     },
-    "HasAttachments": {
-      "type": ["null", "boolean"]
-    },
     "CreatedDateUTC": {
-      "type": ["null", "string"],
-      "format": "date-time"
-    },
-    "CreatedDateUTCString": {
       "type": ["null", "string"],
       "format": "date-time"
     }
   },
-  "tap_schema_dependencies": ["accounts"],
   "additionalProperties": false
 }

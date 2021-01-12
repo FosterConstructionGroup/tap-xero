@@ -5,7 +5,10 @@
       "type": ["null", "string"]
     },
     "Contact": {
-      "$ref": "contacts"
+      "type": ["null", "object"],
+      "properties": {
+        "ContactId": { "type": ["string"] }
+      }
     },
     "Date": {
       "format": "date-time",
@@ -83,9 +86,6 @@
     "Reference": {
       "type": ["null", "string"]
     },
-    "BrandingThemeID": {
-      "type": ["null", "string"]
-    },
     "Url": {
       "type": ["null", "string"]
     },
@@ -96,43 +96,52 @@
       "type": ["null", "string"],
       "format": "date-time"
     },
-    "ExpectedPaymentDateString": {
-      "format": "date-time",
-      "type": ["null", "string"]
-    },
     "PlannedPaymentDate": {
       "type": ["null", "string"],
       "format": "date-time"
     },
-    "PlannedPaymentDateString": {
-      "format": "date-time",
-      "type": ["null", "string"]
-    },
-    "HasAttachments": {
-      "type": ["null", "boolean"]
-    },
     "Payments": {
       "type": ["null", "array"],
       "items": {
-        "$ref": "payments"
+        "type": ["null", "object"],
+        "properties": {
+          "PaymentID": {
+            "type": ["string"]
+          }
+        }
       }
     },
     "CreditNotes": {
       "type": ["null", "array"],
       "items": {
-        "$ref": "credit_notes"
+        "type": ["null", "object"],
+        "properties": {
+          "ID": {
+            "type": ["string"]
+          }
+        }
       }
     },
     "Prepayments": {
       "type": ["null", "array"],
       "items": {
-        "$ref": "prepayments"
+        "type": ["null", "object"],
+        "properties": {
+          "ID": {
+            "type": ["string"]
+          }
+        }
       }
     },
     "Overpayments": {
       "type": ["null", "array"],
       "items": {
-        "$ref": "overpayments"
+        "type": ["null", "object"],
+        "properties": {
+          "ID": {
+            "type": ["string"]
+          }
+        }
       }
     },
     "AmountDue": {
@@ -163,28 +172,13 @@
       "exclusiveMinimum": true,
       "exclusiveMaximum": true
     },
-    "DueDateString": {
-      "format": "date-time",
-      "type": ["null", "string"]
-    },
     "IsDiscounted": {
       "type": ["null", "boolean"]
     },
     "HasErrors": {
       "type": ["null", "boolean"]
-    },
-    "DateString": {
-      "format": "date-time",
-      "type": ["null", "string"]
     }
   },
-  "tap_schema_dependencies": [
-    "contacts",
-    "payments",
-    "prepayments",
-    "overpayments",
-    "line_items",
-    "credit_notes"
-  ],
+  "tap_schema_dependencies": ["line_items"],
   "additionalProperties": false
 }

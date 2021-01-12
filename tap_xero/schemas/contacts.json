@@ -98,13 +98,23 @@
     "SalesTrackingCategories": {
       "type": ["null", "array"],
       "items": {
-        "$ref": "tracking_categories"
+        "type": ["null", "object"],
+        "properties": {
+          "TrackingCategoryID": {
+            "type": ["string"]
+          }
+        }
       }
     },
     "PurchasesTrackingCategories": {
       "type": ["null", "array"],
       "items": {
-        "$ref": "tracking_categories"
+        "type": ["null", "object"],
+        "properties": {
+          "TrackingCategoryID": {
+            "type": ["string"]
+          }
+        }
       }
     },
     "TrackingCategoryName": {
@@ -118,15 +128,17 @@
     },
     "ContactGroups": {
       "items": {
-        "$ref": "contact_groups"
+        "type": ["null", "object"],
+        "properties": {
+          "ContactGroupID": {
+            "type": ["string"]
+          }
+        }
       },
       "type": ["null", "array"]
     },
     "Website": {
       "type": ["null", "string"]
-    },
-    "BrandingTheme": {
-      "$ref": "branding_themes"
     },
     "BatchPayments": {
       "type": ["null", "object"],
@@ -181,29 +193,8 @@
         }
       },
       "additionalProperties": false
-    },
-    "HasAttachments": {
-      "type": ["null", "boolean"]
-    },
-    "Attachments": {
-      "$ref": "attachments"
-    },
-    "HasValidationErrors": {
-      "type": ["null", "boolean"]
-    },
-    "ValidationErrors": {
-      "$ref": "validation_errors"
     }
   },
-  "tap_schema_dependencies": [
-    "addresses",
-    "phones",
-    "contact_groups",
-    "branding_themes",
-    "tracking_categories",
-    "validation_errors",
-    "attachments",
-    "payment_terms"
-  ],
+  "tap_schema_dependencies": ["addresses", "phones", "payment_terms"],
   "additionalProperties": false
 }

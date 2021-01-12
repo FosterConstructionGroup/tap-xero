@@ -5,7 +5,10 @@
       "type": ["null", "string"]
     },
     "Contact": {
-      "$ref": "contacts"
+      "type": ["null", "object"],
+      "properties": {
+        "ContactId": { "type": ["string"] }
+      }
     },
     "Schedule": {
       "type": ["null", "object"],
@@ -46,9 +49,6 @@
       "type": ["null", "string"]
     },
     "Reference": {
-      "type": ["null", "string"]
-    },
-    "BrandingThemeID": {
       "type": ["null", "string"]
     },
     "CurrencyCode": {
@@ -92,13 +92,10 @@
     "RepeatingInvoiceID": {
       "type": ["string"]
     },
-    "HasAttachments": {
-      "type": ["null", "boolean"]
-    },
     "ID": {
       "type": ["null", "string"]
     }
   },
-  "tap_schema_dependencies": ["contacts", "line_items"],
+  "tap_schema_dependencies": ["line_items"],
   "additionalProperties": false
 }

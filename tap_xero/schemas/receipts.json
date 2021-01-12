@@ -6,7 +6,10 @@
       "format": "date-time"
     },
     "Contact": {
-      "$ref": "contacts"
+      "type": ["null", "object"],
+      "properties": {
+        "ContactId": { "type": ["string"] }
+      }
     },
     "LineItems": {
       "type": ["null", "array"],
@@ -15,7 +18,10 @@
       }
     },
     "User": {
-      "$ref": "users"
+      "type": ["null", "object"],
+      "properties": {
+        "UserId": { "type": ["string"] }
+      }
     },
     "Reference": {
       "type": ["null", "string"]
@@ -60,28 +66,13 @@
       "type": ["null", "string"],
       "format": "date-time"
     },
-    "HasAttachments": {
-      "type": ["null", "boolean"]
-    },
     "Url": {
       "type": ["null", "string"]
     },
     "ID": {
       "type": ["null", "string"]
-    },
-    "ValidationErrors": {
-      "$ref": "validation_errors"
-    },
-    "Attachments": {
-      "$ref": "attachments"
     }
   },
-  "tap_schema_dependencies": [
-    "contacts",
-    "line_items",
-    "users",
-    "validation_errors",
-    "attachments"
-  ],
+  "tap_schema_dependencies": ["line_items"],
   "additionalProperties": false
 }

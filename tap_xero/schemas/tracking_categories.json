@@ -40,9 +40,6 @@
           },
           "Name": {
             "type": ["null", "string"]
-          },
-          "HasValidationErrors": {
-            "type": ["null", "boolean"]
           }
         },
         "additionalProperties": false

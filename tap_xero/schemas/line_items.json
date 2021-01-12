@@ -58,11 +58,15 @@
     },
     "Tracking": {
       "items": {
-        "$ref": "tracking_categories"
+        "type": ["null", "object"],
+        "properties": {
+          "TrackingCategoryID": {
+            "type": ["string"]
+          }
+        }
       },
       "type": ["null", "array"]
     }
   },
-  "tap_schema_dependencies": ["tracking_categories"],
   "additionalProperties": false
 }
