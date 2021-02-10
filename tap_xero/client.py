@@ -1,4 +1,3 @@
-from base64 import b64encode
 import re
 import json
 import decimal
@@ -10,6 +9,29 @@ import six
 import pytz
 
 BASE_URL = "https://api.xero.com/api.xro/2.0"
+
+
+def get_token(config):
+    # fall back to the refresh token in config on failure (which will be the first time it runs, or if it expires)
+    try:
+        with open("./refresh_token.secret") as f:
+            refresh_token = f.read()
+    except:
+        refresh_token = config["refresh_token"]
+
+    url = "https://identity.xero.com/connect/token"
+    payload = f"grant_type=refresh_token&refresh_token={refresh_token}"
+    headers = {"Content-Type": "application/x-www-form-urlencoded"}
+    auth = (config["client_id"], config["client_secret"])
+
+    json = requests.post(url, auth=auth, headers=headers, data=payload).json()
+    access_token = json["access_token"]
+    refresh_token = json["refresh_token"]
+
+    with open("./refresh_token.secret", "w") as f:
+        f.write(refresh_token)
+
+    return access_token
 
 
 def parse_date(value):
@@ -63,11 +85,6 @@ def _json_load_object_hook(_dict):
     return _dict
 
 
-def update_config_file(config, config_path):
-    with open(config_path, "w") as config_file:
-        json.dump(config, config_file, indent=2)
-
-
 class XeroClient:
     def __init__(self, config):
         self.session = requests.Session()
@@ -75,32 +92,10 @@ class XeroClient:
         self.tenant_id = None
         self.access_token = None
 
-    def refresh_credentials(self, config, config_path):
-
-        header_token = b64encode(
-            (config["client_id"] + ":" + config["client_secret"]).encode("utf-8")
-        )
-
-        headers = {
-            "Authorization": "Basic " + header_token.decode("utf-8"),
-            "Content-Type": "application/x-www-form-urlencoded",
-        }
-
-        post_body = {
-            "grant_type": "refresh_token",
-            "refresh_token": config["refresh_token"],
-        }
-        resp = self.session.post(
-            "https://identity.xero.com/connect/token", headers=headers, data=post_body
-        )
-        resp.raise_for_status()
-        resp = resp.json()
-
-        # Write to config file
-        config["refresh_token"] = resp["refresh_token"]
-        update_config_file(config, config_path)
-        self.access_token = resp["access_token"]
+    def refresh_credentials(self, config):
         self.tenant_id = config["tenant_id"]
+        # handles refresh, returns access token
+        self.access_token = get_token(config)
 
     def filter(self, tap_stream_id, since=None, **params):
         xero_resource_name = tap_stream_id.title().replace("_", "")

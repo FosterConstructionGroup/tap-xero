@@ -4,15 +4,14 @@ from .client import XeroClient
 
 
 class Context:
-    def __init__(self, config, state, catalog, config_path):
+    def __init__(self, config, state, catalog):
         self.config = config
-        self.config_path = config_path
         self.state = state
         self.catalog = catalog
         self.client = XeroClient(config)
 
     def refresh_credentials(self):
-        self.client.refresh_credentials(self.config, self.config_path)
+        self.client.refresh_credentials(self.config)
 
     def get_bookmark(self, path):
         return bks_.get_bookmark(self.state, *path)

@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 import os
-import json
 import singer
-from singer import metadata, metrics, utils
+from singer import metadata, utils
 from singer.catalog import Catalog, CatalogEntry, Schema
 from . import streams as streams_
 from .client import XeroClient
@@ -122,15 +121,15 @@ def sync(ctx):
 def main_impl():
     args = utils.parse_args(REQUIRED_CONFIG_KEYS)
     if args.discover:
-        discover(Context(args.config, {}, {}, args.config_path)).dump()
+        discover(Context(args.config, {}, {})).dump()
         print()
     else:
         catalog = (
             Catalog.from_dict(args.properties)
             if args.properties
-            else discover(Context(args.config, {}, {}, args.config_path))
+            else discover(Context(args.config, {}, {}))
         )
-        sync(Context(args.config, args.state, catalog, args.config_path))
+        sync(Context(args.config, args.state, catalog))
 
 
 def main():
