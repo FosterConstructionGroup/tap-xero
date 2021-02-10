@@ -1,4 +1,5 @@
 refresh_token.secret
+state.json
 properties.json
 
 # Byte-compiled / optimized / DLL files

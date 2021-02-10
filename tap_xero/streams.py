@@ -72,7 +72,6 @@ class Stream:
 class BookmarkedStream(Stream):
     def sync(self, ctx):
         bookmark = [self.tap_stream_id, self.bookmark_key]
-        # start = ctx.update_start_date_bookmark(bookmark)
         start = ctx.get_bookmark(bookmark)
         records = _make_request(ctx, self.tap_stream_id, dict(since=start))
         if records:
@@ -87,7 +86,6 @@ class PaginatedStream(Stream):
     def sync(self, ctx):
         bookmark = [self.tap_stream_id, self.bookmark_key]
         offset = [self.tap_stream_id, "page"]
-        # start = ctx.update_start_date_bookmark(bookmark)
         start = ctx.get_bookmark(bookmark)
         curr_page_num = ctx.get_offset(offset) or 1
         filter_options = dict(since=start, order="UpdatedDateUTC ASC")

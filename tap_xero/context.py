@@ -13,8 +13,10 @@ class Context:
     def refresh_credentials(self):
         self.client.refresh_credentials(self.config)
 
+    # If there isn't a bookmark, fall back to start date from config
     def get_bookmark(self, path):
-        return bks_.get_bookmark(self.state, *path)
+        b = bks_.get_bookmark(self.state, *path)
+        return b if b else self.config["start_date"]
 
     def set_bookmark(self, path, val):
         bks_.write_bookmark(self.state, path[0], path[1], val)
@@ -28,14 +30,6 @@ class Context:
 
     def clear_offsets(self, tap_stream_id):
         bks_.clear_offset(self.state, tap_stream_id)
-
-    # I think this is meant to overwrite the start date if blank? I'd rather just sync data for all time
-    # def update_start_date_bookmark(self, path):
-    #     val = self.get_bookmark(path)
-    #     # if not val:
-    #     #     val = self.config["start_date"]
-    #     #     self.set_bookmark(path, val)
-    #     return val
 
     def write_state(self):
         singer.write_state(self.state)
