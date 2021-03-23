@@ -1,3 +1,4 @@
+import os
 import re
 import json
 import decimal
@@ -10,11 +11,13 @@ import pytz
 
 BASE_URL = "https://api.xero.com/api.xro/2.0"
 
+refresh_token_path = os.path.join(os.path.dirname(__file__), "refresh_token.secret")
+
 
 def get_token(config):
     # fall back to the refresh token in config on failure (which will be the first time it runs, or if it expires)
     try:
-        with open("./refresh_token.secret") as f:
+        with open(refresh_token_path) as f:
             refresh_token = f.read()
     except:
         refresh_token = config["refresh_token"]
@@ -28,7 +31,7 @@ def get_token(config):
     access_token = json["access_token"]
     refresh_token = json["refresh_token"]
 
-    with open("./refresh_token.secret", "w") as f:
+    with open(refresh_token_path, "w") as f:
         f.write(refresh_token)
 
     return access_token
