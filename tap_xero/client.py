@@ -100,7 +100,7 @@ class XeroClient:
         # handles refresh, returns access token
         self.access_token = get_token(config)
 
-    def filter(self, tap_stream_id, since=None, **params):
+    def fetch(self, tap_stream_id, since=None, **params):
         xero_resource_name = tap_stream_id.title().replace("_", "")
         url = join(BASE_URL, xero_resource_name)
         headers = {
@@ -113,7 +113,9 @@ class XeroClient:
         if since:
             headers["If-Modified-Since"] = since
 
-        request = requests.Request("GET", url, headers=headers, params=params)
+        request = requests.Request(
+            "GET", url, headers=headers, params={**params, "includeArchived": "true"}
+        )
         response = self.session.send(request.prepare())
         response.raise_for_status()
         response_meta = json.loads(

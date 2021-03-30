@@ -12,7 +12,7 @@ FULL_PAGE_SIZE = 100
 def _request_with_timer(tap_stream_id, xero, filter_options):
     with metrics.http_request_timer(tap_stream_id) as timer:
         try:
-            resp = xero.filter(tap_stream_id, **filter_options)
+            resp = xero.fetch(tap_stream_id, **filter_options)
             timer.tags[metrics.Tag.http_status_code] = 200
             return resp
         except HTTPError as e:

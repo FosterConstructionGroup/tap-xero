@@ -65,7 +65,7 @@ def load_metadata(stream, schema):
 
 
 def ensure_credentials_are_valid(config):
-    XeroClient(config).filter("currencies")
+    XeroClient(config).fetch("currencies")
 
 
 def discover(ctx):
