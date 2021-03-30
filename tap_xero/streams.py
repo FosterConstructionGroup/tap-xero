@@ -1,46 +1,39 @@
+import time
 from requests.exceptions import HTTPError
 import singer
 from singer import metadata, metrics, Transformer
 from singer.utils import strptime_with_tz
-import backoff
 from . import transform
 
 LOGGER = singer.get_logger()
 FULL_PAGE_SIZE = 100
 
 
-def _request_with_timer(tap_stream_id, xero, filter_options):
-    with metrics.http_request_timer(tap_stream_id) as timer:
-        try:
-            resp = xero.fetch(tap_stream_id, **filter_options)
-            timer.tags[metrics.Tag.http_status_code] = 200
-            return resp
-        except HTTPError as e:
-            timer.tags[metrics.Tag.http_status_code] = e.response.status_code
-            raise
-
-
-class RateLimitException(Exception):
-    pass
-
-
-@backoff.on_exception(backoff.expo, RateLimitException, max_tries=10, factor=2)
 def _make_request(ctx, tap_stream_id, filter_options=None, attempts=0):
     filter_options = filter_options or {}
     try:
-        return _request_with_timer(tap_stream_id, ctx.client, filter_options)
+        return ctx.client.fetch(tap_stream_id, **filter_options)
     except HTTPError as e:
         if e.response.status_code == 401:
-            if attempts == 1:
+            if attempts >= 1:
                 raise Exception(
                     "Received Not Authorized response after credential refresh."
                 ) from e
             ctx.refresh_credentials()
             return _make_request(ctx, tap_stream_id, filter_options, attempts + 1)
-
-        if e.response.status_code == 503:
-            raise RateLimitException() from e
-        raise
+        elif e.response.status_code == 429 or e.response.status_code == 503:
+            if attempts >= 5:
+                raise Exception(
+                    "Still rate-limited after waiting for the retry period multiple times."
+                ) from e
+            wait = float(e.response.headers["Retry-After"])
+            if wait > 60:
+                raise Exception("Wait is over 60s so hitting daily rate limit") from e
+            LOGGER.info(f"Waiting for rate limit: {wait}")
+            time.sleep(wait)
+            return _make_request(ctx, tap_stream_id, filter_options, attempts + 1)
+        else:
+            raise
     assert False
 
 
