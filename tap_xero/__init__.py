@@ -119,7 +119,9 @@ def sync(ctx):
 
     streams = [s for s in all_streams if s.tap_stream_id in stream_ids_to_sync]
     subs_dict = {
-        s.tap_stream_id: s for s in streams if s.tap_stream_id in sub_stream_ids
+        s.tap_stream_id: s
+        for s in streams
+        if s.tap_stream_id in sub_stream_ids and s.tap_stream_id in stream_ids_to_sync
     }
     for stream in streams:
         stream_id = stream.tap_stream_id
@@ -132,7 +134,7 @@ def sync(ctx):
         load_and_write_schema(stream)
 
         sub = (
-            subs_dict[stream_id + sub_stream_suffix]
+            subs_dict.get(stream_id + sub_stream_suffix)
             if stream_id in has_sub_stream_ids
             else None
         )
