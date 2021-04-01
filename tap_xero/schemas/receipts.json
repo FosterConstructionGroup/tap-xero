@@ -11,12 +11,6 @@
         "ContactId": { "type": ["string"] }
       }
     },
-    "LineItems": {
-      "type": ["null", "array"],
-      "items": {
-        "$ref": "line_items"
-      }
-    },
     "User": {
       "type": ["null", "object"],
       "properties": {

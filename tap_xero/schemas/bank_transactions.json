@@ -10,12 +10,6 @@
         "ContactId": { "type": ["string"] }
       }
     },
-    "LineItems": {
-      "type": ["null", "array"],
-      "items": {
-        "$ref": "line_items"
-      }
-    },
     "BankAccount": {
       "type": ["null", "object"],
       "properties": {

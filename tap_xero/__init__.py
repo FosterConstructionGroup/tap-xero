@@ -3,7 +3,14 @@ import os
 import singer
 from singer import metadata, utils
 from singer.catalog import Catalog, CatalogEntry, Schema
-from . import streams as streams_
+from . import streams as streams
+from .streams import (
+    all_streams,
+    all_stream_ids,
+    sub_stream_ids,
+    has_sub_stream_ids,
+    sub_stream_suffix,
+)
 from .client import XeroClient
 from .context import Context
 
@@ -68,11 +75,19 @@ def ensure_credentials_are_valid(config):
     XeroClient(config).fetch("currencies")
 
 
+def load_correct_schema(stream_id):
+    return (
+        load_schema(stream_id)
+        if not stream_id.endswith(sub_stream_suffix)
+        else load_schema("line_items")
+    )
+
+
 def discover(ctx):
     ctx.refresh_credentials()
     catalog = Catalog([])
-    for stream in streams_.all_streams:
-        schema_dict = load_schema(stream.tap_stream_id)
+    for stream in streams.all_streams:
+        schema_dict = load_correct_schema(stream)
         mdata = load_metadata(stream, schema_dict)
 
         schema = Schema.from_dict(schema_dict)
@@ -91,33 +106,41 @@ def discover(ctx):
 def load_and_write_schema(stream):
     singer.write_schema(
         stream.tap_stream_id,
-        load_schema(stream.tap_stream_id),
+        load_correct_schema(stream.tap_stream_id),
         stream.pk_fields,
     )
 
 
 def sync(ctx):
     ctx.refresh_credentials()
-    currently_syncing = ctx.state.get("currently_syncing")
-    start_idx = (
-        streams_.all_stream_ids.index(currently_syncing) if currently_syncing else 0
-    )
-    stream_ids_to_sync = [
+    stream_ids_to_sync = {
         cs.tap_stream_id for cs in ctx.catalog.streams if cs.is_selected()
-    ]
-    streams = [
-        s
-        for s in streams_.all_streams[start_idx:]
-        if s.tap_stream_id in stream_ids_to_sync
-    ]
+    }
+
+    streams = [s for s in all_streams if s.tap_stream_id in stream_ids_to_sync]
+    subs_dict = {
+        s.tap_stream_id: s for s in streams if s.tap_stream_id in sub_stream_ids
+    }
     for stream in streams:
-        ctx.state["currently_syncing"] = stream.tap_stream_id
+        stream_id = stream.tap_stream_id
+
+        # sub-stream IDs will be synced by parent stream
+        if stream_id in sub_stream_ids:
+            continue
+
         ctx.write_state()
         load_and_write_schema(stream)
-        LOGGER.info("Syncing stream: %s", stream.tap_stream_id)
-        stream.sync(ctx)
-    ctx.state["currently_syncing"] = None
-    ctx.write_state()
+
+        sub = (
+            subs_dict[stream_id + sub_stream_suffix]
+            if stream_id in has_sub_stream_ids
+            else None
+        )
+        if sub:
+            load_and_write_schema(sub)
+
+        LOGGER.info("Syncing stream: %s", stream_id)
+        stream.sync(ctx, sub)
 
 
 def main_impl():

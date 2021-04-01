@@ -24,12 +24,6 @@
     "Reference": {
       "type": ["null", "string"]
     },
-    "LineItems": {
-      "type": ["null", "array"],
-      "items": {
-        "$ref": "line_items"
-      }
-    },
     "CurrencyCode": {
       "type": ["null", "string"]
     },

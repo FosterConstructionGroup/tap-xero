@@ -39,12 +39,6 @@
       },
       "additionalProperties": false
     },
-    "LineItems": {
-      "items": {
-        "$ref": "line_items"
-      },
-      "type": ["null", "array"]
-    },
     "LineAmountTypes": {
       "type": ["null", "string"]
     },

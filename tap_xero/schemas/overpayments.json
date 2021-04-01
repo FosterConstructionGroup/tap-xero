@@ -28,12 +28,6 @@
     "LineAmountTypes": {
       "type": ["null", "string"]
     },
-    "LineItems": {
-      "items": {
-        "$ref": "line_items"
-      },
-      "type": ["null", "array"]
-    },
     "SubTotal": {
       "type": ["null", "number"],
       "minimum": -1e33,

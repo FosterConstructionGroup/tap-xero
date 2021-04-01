@@ -1,6 +1,12 @@
 {
   "type": ["null", "object"],
   "properties": {
+    "LineItemID": {
+      "type": ["string"]
+    },
+    "ParentID": {
+      "type": ["string"]
+    },
     "Description": {
       "type": ["null", "string"]
     },
@@ -25,9 +31,6 @@
     },
     "ItemCode": {
       "type": ["null", "string"]
-    },
-    "LineItemID": {
-      "type": ["string"]
     },
     "TaxType": {
       "type": ["null", "string"]

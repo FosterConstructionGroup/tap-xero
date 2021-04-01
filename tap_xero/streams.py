@@ -63,20 +63,24 @@ class Stream:
 
 
 class BookmarkedStream(Stream):
-    def sync(self, ctx):
+    def sync(self, ctx, sub=None):
         bookmark = [self.tap_stream_id, self.bookmark_key]
         start = ctx.get_bookmark(bookmark)
         records = _make_request(ctx, self.tap_stream_id, dict(since=start))
         if records:
             self.format_fn(records)
             self.write_records(records, ctx)
+            if sub:
+                sub.write_records(
+                    [row for parent in records for row in parent["LineItems"]], ctx
+                )
             max_bookmark_value = max([record[self.bookmark_key] for record in records])
             ctx.set_bookmark(bookmark, max_bookmark_value)
             ctx.write_state()
 
 
 class PaginatedStream(Stream):
-    def sync(self, ctx):
+    def sync(self, ctx, sub=None):
         bookmark = [self.tap_stream_id, self.bookmark_key]
         offset = [self.tap_stream_id, "page"]
         start = ctx.get_bookmark(bookmark)
@@ -91,6 +95,10 @@ class PaginatedStream(Stream):
             if records:
                 self.format_fn(records)
                 self.write_records(records, ctx)
+                if sub:
+                    sub.write_records(
+                        [row for parent in records for row in parent["LineItems"]], ctx
+                    )
                 max_updated = records[-1][self.bookmark_key]
             if not records or len(records) < FULL_PAGE_SIZE:
                 break
@@ -162,10 +170,19 @@ class Everything(Stream):
         self.bookmark_key = None
         self.replication_method = "FULL_TABLE"
 
-    def sync(self, ctx):
+    def sync(self, ctx, sub=None):
         records = _make_request(ctx, self.tap_stream_id)
         self.format_fn(records)
         self.write_records(records, ctx)
+        if sub:
+            sub.write_records(
+                [row for parent in records for row in parent["LineItems"]], ctx
+            )
+
+
+class SubStream(Stream):
+    def __init__(self, name, *args, **kwargs):
+        super().__init__(name, ["LineItemID"], *args, **kwargs)
 
 
 all_streams = [
@@ -220,5 +237,22 @@ all_streams = [
     LinkedTransactions(
         "linked_transactions", ["LinkedTransactionID"], bookmark_key="UpdatedDateUTC"
     ),
+    # SUBSTREAMS
+    # These aren't specific endpoints, they're substreams on existing endpoints
+    # Splitting into separate substreams because pipelinewise-target-redshift doesn't create new tables for them automatically
+    SubStream("bank_transactions_lines"),
+    SubStream("credit_notes_lines"),
+    SubStream("invoices_lines"),
+    SubStream("overpayments_lines"),
+    SubStream("prepayments_lines"),
+    SubStream("purchase_orders_lines"),
+    SubStream("receipts_lines"),
+    SubStream("repeating_invoices_lines"),
 ]
 all_stream_ids = [s.tap_stream_id for s in all_streams]
+
+sub_stream_suffix = "_lines"
+sub_stream_ids = {s for s in all_stream_ids if s.endswith(sub_stream_suffix)}
+has_sub_stream_ids = {
+    s for s in all_stream_ids if (s + sub_stream_suffix) in sub_stream_ids
+}
