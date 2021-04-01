@@ -113,7 +113,7 @@ class Journals(Stream):
     and paging the data. See
     https://developer.xero.com/documentation/api/journals"""
 
-    def sync(self, ctx):
+    def sync(self, ctx, sub=None):
         bookmark = [self.tap_stream_id, self.bookmark_key]
         journal_number = ctx.get_bookmark(bookmark) or 0
         while True:
@@ -136,7 +136,7 @@ class LinkedTransactions(Stream):
     all of the data, but we can manually omit records based on the
     UpdatedDateUTC property."""
 
-    def sync(self, ctx):
+    def sync(self, ctx, sub=None):
         bookmark = [self.tap_stream_id, self.bookmark_key]
         offset = [self.tap_stream_id, "page"]
         # start = ctx.update_start_date_bookmark(bookmark)

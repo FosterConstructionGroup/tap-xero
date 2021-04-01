@@ -87,7 +87,7 @@ def discover(ctx):
     ctx.refresh_credentials()
     catalog = Catalog([])
     for stream in streams.all_streams:
-        schema_dict = load_correct_schema(stream)
+        schema_dict = load_correct_schema(stream.tap_stream_id)
         mdata = load_metadata(stream, schema_dict)
 
         schema = Schema.from_dict(schema_dict)
