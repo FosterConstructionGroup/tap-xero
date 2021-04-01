@@ -37,6 +37,15 @@ def _make_request(ctx, tap_stream_id, filter_options=None, attempts=0):
     assert False
 
 
+def write_sub_records(ctx, parent_pk, sub, records):
+    rows = [
+        {**row, "ParentID": parent[parent_pk]}
+        for parent in records
+        for row in parent["LineItems"]
+    ]
+    sub.write_records(rows, ctx)
+
+
 class Stream:
     def __init__(
         self, tap_stream_id, pk_fields, bookmark_key="UpdatedDateUTC", format_fn=None
@@ -71,9 +80,7 @@ class BookmarkedStream(Stream):
             self.format_fn(records)
             self.write_records(records, ctx)
             if sub:
-                sub.write_records(
-                    [row for parent in records for row in parent["LineItems"]], ctx
-                )
+                write_sub_records(ctx, self.pk_fields[0], sub, records)
             max_bookmark_value = max([record[self.bookmark_key] for record in records])
             ctx.set_bookmark(bookmark, max_bookmark_value)
             ctx.write_state()
@@ -96,9 +103,7 @@ class PaginatedStream(Stream):
                 self.format_fn(records)
                 self.write_records(records, ctx)
                 if sub:
-                    sub.write_records(
-                        [row for parent in records for row in parent["LineItems"]], ctx
-                    )
+                    write_sub_records(ctx, self.pk_fields[0], sub, records)
                 max_updated = records[-1][self.bookmark_key]
             if not records or len(records) < FULL_PAGE_SIZE:
                 break
@@ -175,9 +180,7 @@ class Everything(Stream):
         self.format_fn(records)
         self.write_records(records, ctx)
         if sub:
-            sub.write_records(
-                [row for parent in records for row in parent["LineItems"]], ctx
-            )
+            write_sub_records(ctx, self.pk_fields[0], sub, records)
 
 
 class SubStream(Stream):
