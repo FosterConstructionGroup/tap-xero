@@ -39,9 +39,15 @@ def _make_request(ctx, tap_stream_id, filter_options=None, attempts=0):
 
 def write_sub_records(ctx, parent_pk, sub, records):
     rows = [
-        {**row, "ParentID": parent[parent_pk]}
+        {
+            **row,
+            "ParentID": parent[parent_pk],
+            # Xero thinks it's reasonable for only Invoices to actually return a LineItemID, so instead create one using the parent's ID and the item's index
+            # See https://www.notion.so/fosters/tap-xero-aaf6c7d5a008445f8a9efa0d956570d3#da301fa942024cf880e1859660a172d1
+            "LineItemID": f"{parent[parent_pk]}|{row_index}",
+        }
         for parent in records
-        for row in parent["LineItems"]
+        for (row_index, row) in enumerate(parent["LineItems"])
     ]
     sub.write_records(rows, ctx)
 
