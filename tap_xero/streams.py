@@ -1,4 +1,5 @@
 import time
+import json
 from requests.exceptions import HTTPError
 import singer
 from singer import metadata, metrics, Transformer
@@ -45,6 +46,8 @@ def write_sub_records(ctx, parent_pk, sub, records):
             # Xero thinks it's reasonable for only Invoices to actually return a LineItemID, so instead create one using the parent's ID and the item's index
             # See https://www.notion.so/fosters/tap-xero-aaf6c7d5a008445f8a9efa0d956570d3#da301fa942024cf880e1859660a172d1
             "LineItemID": f"{parent[parent_pk]}|{row_index}",
+            # Have to JSON-encode so linebreaks aren't stripped out by Redshift loader
+            "Description": json.dumps(row.get("Description")),
         }
         for parent in records
         for (row_index, row) in enumerate(parent["LineItems"])
