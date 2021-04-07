@@ -16,7 +16,7 @@
     "Invoice": {
       "type": ["null", "object"],
       "properties": {
-        "InvoiceId": { "type": ["string"] }
+        "InvoiceID": { "type": ["string"] }
       }
     }
   },

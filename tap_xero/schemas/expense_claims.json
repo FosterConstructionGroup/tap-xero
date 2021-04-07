@@ -4,7 +4,7 @@
     "User": {
       "type": ["null", "object"],
       "properties": {
-        "UserId": {
+        "UserID": {
           "type": ["string"]
         }
       }

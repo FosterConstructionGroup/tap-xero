@@ -40,7 +40,7 @@
     "Account": {
       "type": ["null", "object"],
       "properties": {
-        "AccountId": {
+        "AccountID": {
           "type": ["string"]
         }
       }
@@ -48,7 +48,7 @@
     "Invoice": {
       "type": ["null", "object"],
       "properties": {
-        "InvoiceId": { "type": ["string"] }
+        "InvoiceID": { "type": ["string"] }
       }
     },
     "CreditNote": {

@@ -8,13 +8,13 @@
     "Contact": {
       "type": ["null", "object"],
       "properties": {
-        "ContactId": { "type": ["string"] }
+        "ContactID": { "type": ["string"] }
       }
     },
     "User": {
       "type": ["null", "object"],
       "properties": {
-        "UserId": { "type": ["string"] }
+        "UserID": { "type": ["string"] }
       }
     },
     "Reference": {

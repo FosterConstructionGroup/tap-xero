@@ -4,7 +4,7 @@
     "FromBankAccount": {
       "type": ["null", "object"],
       "properties": {
-        "AccountId": {
+        "AccountID": {
           "type": ["string"]
         }
       }
@@ -12,7 +12,7 @@
     "ToBankAccount": {
       "type": ["null", "object"],
       "properties": {
-        "AccountId": {
+        "AccountID": {
           "type": ["string"]
         }
       }

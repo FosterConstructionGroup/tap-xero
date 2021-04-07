@@ -4,7 +4,7 @@
     "Contact": {
       "type": ["null", "object"],
       "properties": {
-        "ContactId": { "type": ["string"] }
+        "ContactID": { "type": ["string"] }
       }
     },
     "Date": {
