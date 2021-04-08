@@ -29,7 +29,9 @@ def _make_request(ctx, tap_stream_id, filter_options=None, attempts=0):
                 ) from e
             wait = float(e.response.headers["Retry-After"])
             if wait > 60:
-                raise Exception("Wait is over 60s so hitting daily rate limit") from e
+                raise Exception(
+                    f"Wait of {wait}s is over 60s so have hit daily rate limit"
+                ) from e
             LOGGER.info(f"Waiting for rate limit: {wait}")
             time.sleep(wait)
             return _make_request(ctx, tap_stream_id, filter_options, attempts + 1)
