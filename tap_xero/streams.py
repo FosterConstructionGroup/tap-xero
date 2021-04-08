@@ -48,6 +48,7 @@ def write_sub_records(ctx, parent_pk, sub, records):
             "LineItemID": f"{parent[parent_pk]}|{row_index}",
             # Have to JSON-encode so linebreaks aren't stripped out by Redshift loader
             "Description": json.dumps(row.get("Description")),
+            "Tracking": row["Tracking"][0] if len(row["Tracking"]) > 0 else None,
         }
         for parent in records
         for (row_index, row) in enumerate(parent["LineItems"])
