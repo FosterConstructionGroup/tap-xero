@@ -50,3 +50,19 @@ def format_journals(journals):
     for journal in journals:
         if journal.get("JournalDate") == "/Date(0+0000)/":
             journal["JournalDate"] = "1970-01-01T00:00:00.000000Z"
+
+
+def format_tracking_categories(tcs):
+    # Flatten response to match schema (because Redshift is bad at JSON columns and two tables is excessive)
+    return [
+        {
+            "TrackingCategoryID": tc.get("TrackingCategoryID"),
+            "Status": tc.get("Status"),
+            "TrackingCategoryName": tc.get("Name"),
+            "TrackingOptionID": opt.get("TrackingOptionID"),
+            "TrackingOptionStatus": opt.get("Status"),
+            "TrackingOptionName": opt.get("Name"),
+        }
+        for tc in tcs
+        for opt in tc["Options"]
+    ]

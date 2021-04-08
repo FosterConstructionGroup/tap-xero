@@ -189,8 +189,8 @@ class Everything(Stream):
 
     def sync(self, ctx, sub=None):
         records = _make_request(ctx, self.tap_stream_id)
-        self.format_fn(records)
-        self.write_records(records, ctx)
+        transformed = self.format_fn(records)
+        self.write_records(records if transformed is None else transformed, ctx)
         if sub:
             write_sub_records(ctx, self.pk_fields[0], sub, records)
 
@@ -246,7 +246,11 @@ all_streams = [
     Everything("organisations", ["OrganisationID"]),
     Everything("repeating_invoices", ["RepeatingInvoiceID"]),
     Everything("tax_rates", ["TaxType"]),
-    Everything("tracking_categories", ["TrackingCategoryID"]),
+    Everything(
+        "tracking_categories",
+        ["TrackingOptionID"],
+        format_fn=transform.format_tracking_categories,
+    ),
     # LINKED TRANSACTIONS STREAM
     # This endpoint is not paginated, but can do some manual filtering
     LinkedTransactions(
