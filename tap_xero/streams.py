@@ -40,20 +40,24 @@ def _make_request(ctx, tap_stream_id, filter_options=None, attempts=0):
     assert False
 
 
-def write_sub_records(ctx, parent_pk, sub, records):
+def write_sub_records(
+    ctx, parent_pk, sub, records, id_key=None, parent_key="LineItems"
+):
     rows = [
         {
             **row,
             "ParentID": parent[parent_pk],
-            # Xero thinks it's reasonable for only Invoices to actually return a LineItemID, so instead create one using the parent's ID and the item's index
+            # Xero thinks it's reasonable for some streams to not return a LineItemID, so create one if required using the parent's ID and the item's index
             # See https://www.notion.so/fosters/tap-xero-aaf6c7d5a008445f8a9efa0d956570d3#da301fa942024cf880e1859660a172d1
-            "LineItemID": f"{parent[parent_pk]}|{row_index}",
+            "LineItemID": f"{parent[parent_pk]}|{row_index}"
+            if id_key is None
+            else row[id_key],
             # Have to JSON-encode so linebreaks aren't stripped out by Redshift loader
             "Description": json.dumps(row.get("Description")),
             "Tracking": row["Tracking"][0] if len(row["Tracking"]) > 0 else None,
         }
         for parent in records
-        for (row_index, row) in enumerate(parent["LineItems"])
+        for (row_index, row) in enumerate(parent[parent_key])
     ]
     sub.write_records(rows, ctx)
 
@@ -115,7 +119,15 @@ class PaginatedStream(Stream):
                 self.format_fn(records)
                 self.write_records(records, ctx)
                 if sub:
-                    write_sub_records(ctx, self.pk_fields[0], sub, records)
+                    write_sub_records(
+                        ctx,
+                        self.pk_fields[0],
+                        sub,
+                        records,
+                        parent_key="JournalLines"
+                        if self.tap_stream_id == "manual_journals"
+                        else "LineItems",
+                    )
                 max_updated = records[-1][self.bookmark_key]
             if not records or len(records) < FULL_PAGE_SIZE:
                 break
@@ -139,6 +151,21 @@ class Journals(Stream):
             if records:
                 self.format_fn(records)
                 self.write_records(records, ctx)
+                if sub:
+                    rows = [
+                        {
+                            **row,
+                            "JournalID": parent["JournalID"],
+                            # Have to JSON-encode so linebreaks aren't stripped out by Redshift loader
+                            "Description": json.dumps(row.get("Description")),
+                            "Tracking": row["TrackingCategories"][0]
+                            if len(row["TrackingCategories"]) > 0
+                            else None,
+                        }
+                        for parent in records
+                        for row in parent["JournalLines"]
+                    ]
+                    sub.write_records(rows, ctx)
                 journal_number = max((record[self.bookmark_key] for record in records))
                 ctx.set_bookmark(bookmark, journal_number)
                 ctx.write_state()
@@ -262,6 +289,8 @@ all_streams = [
     SubStream("bank_transactions_lines"),
     SubStream("credit_notes_lines"),
     SubStream("invoices_lines"),
+    SubStream("journals_lines"),
+    SubStream("manual_journals_lines"),
     SubStream("overpayments_lines"),
     SubStream("prepayments_lines"),
     SubStream("purchase_orders_lines"),

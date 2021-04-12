@@ -78,7 +78,7 @@ def ensure_credentials_are_valid(config):
 def load_correct_schema(stream_id):
     return (
         load_schema(stream_id)
-        if not stream_id.endswith(sub_stream_suffix)
+        if not stream_id.endswith(sub_stream_suffix) or "journals" in stream_id
         else load_schema("line_items")
     )
 

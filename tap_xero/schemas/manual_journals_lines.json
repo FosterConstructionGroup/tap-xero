@@ -1,0 +1,54 @@
+{
+  "type": ["null", "object"],
+  "properties": {
+    "ParentID": {
+      "type": ["string"]
+    },
+    "LineItemID": {
+      "type": ["string"]
+    },
+    "LineAmount": {
+      "type": ["null", "number"],
+      "minimum": -1e33,
+      "maximum": 1e33,
+      "multipleOf": 1e-5,
+      "exclusiveMinimum": true,
+      "exclusiveMaximum": true
+    },
+    "Description": {
+      "type": ["null", "string"]
+    },
+    "TaxAmount": {
+      "type": ["null", "number"],
+      "minimum": -1e33,
+      "maximum": 1e33,
+      "multipleOf": 1e-5,
+      "exclusiveMinimum": true,
+      "exclusiveMaximum": true
+    },
+    "AccountID": {
+      "type": ["null", "string"]
+    },
+    "AccountCode": {
+      "type": ["null", "string"]
+    },
+    "IsBlank": {
+      "type": ["null", "boolean"]
+    },
+    "TaxType": {
+      "type": ["null", "string"]
+    },
+    "Tracking": {
+      "items": {
+        "type": ["null", "object"],
+        "properties": {
+          "TrackingCategoryID": {
+            "type": ["string"]
+          }
+        }
+      },
+      "type": ["null", "array"]
+    }
+  },
+  "additionalProperties": false
+}

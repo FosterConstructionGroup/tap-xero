@@ -23,59 +23,6 @@
     },
     "SourceType": {
       "type": ["null", "string"]
-    },
-    "JournalLines": {
-      "items": {
-        "properties": {
-          "JournalLineID": {
-            "type": ["null", "string"]
-          },
-          "AccountType": {
-            "type": ["null", "string"]
-          },
-          "AccountID": {
-            "type": ["null", "string"]
-          },
-          "AccountCode": {
-            "type": ["null", "string"]
-          },
-          "TaxName": {
-            "type": ["null", "string"]
-          },
-          "TaxType": {
-            "type": ["null", "string"]
-          },
-          "Description": {
-            "type": ["null", "string"]
-          },
-          "GrossAmount": {
-            "type": ["null", "number"]
-          },
-          "NetAmount": {
-            "type": ["null", "number"]
-          },
-          "AccountName": {
-            "type": ["null", "string"]
-          },
-          "TaxAmount": {
-            "type": ["null", "number"]
-          },
-          "TrackingCategories": {
-            "items": {
-              "type": ["null", "object"],
-              "properties": {
-                "TrackingCategoryID": {
-                  "type": ["string"]
-                }
-              }
-            },
-            "type": ["null", "array"]
-          }
-        },
-        "type": ["null", "object"],
-        "additionalProperties": false
-      },
-      "type": ["null", "array"]
     }
   },
   "additionalProperties": false
