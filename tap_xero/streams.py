@@ -226,7 +226,8 @@ class Everything(Stream):
 
 class SubStream(Stream):
     def __init__(self, name, *args, **kwargs):
-        super().__init__(name, ["LineItemID"], *args, **kwargs)
+        key = "LineItemID" if name != "journal_lines" else "JournalLineID"
+        super().__init__(name, [key], *args, **kwargs)
 
 
 all_streams = [
