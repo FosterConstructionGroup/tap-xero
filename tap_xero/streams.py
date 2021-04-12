@@ -119,13 +119,15 @@ class PaginatedStream(Stream):
                 self.format_fn(records)
                 self.write_records(records, ctx)
                 if sub:
+                    stream_id = self.tap_stream_id
                     write_sub_records(
                         ctx,
                         self.pk_fields[0],
                         sub,
                         records,
+                        id_key="LineItemID" if stream_id == "invoices" else None,
                         parent_key="JournalLines"
-                        if self.tap_stream_id == "manual_journals"
+                        if stream_id == "manual_journals"
                         else "LineItems",
                     )
                 max_updated = records[-1][self.bookmark_key]
