@@ -82,7 +82,7 @@ def _json_load_object_hook(_dict):
             value = parse_date(value)
             if value:
                 # NB> Pylint disabled because, regardless of idioms, this is more explicit than isinstance.
-                if type(value) is date: # pylint: disable=unidiomatic-typecheck
+                if type(value) is date:  # pylint: disable=unidiomatic-typecheck
                     value = datetime.combine(value, time.min)
                 value = value.replace(tzinfo=pytz.UTC)
                 _dict[key] = strftime(value)
