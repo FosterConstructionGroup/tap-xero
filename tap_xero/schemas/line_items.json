@@ -62,8 +62,9 @@
     "Tracking": {
       "type": ["null", "object"],
       "properties": {
-        "TrackingCategoryID": { "type": ["string"] },
-        "TrackingOptionID": { "type": ["string"] }
+        "Name": { "type": ["null", "string"] },
+        "Option": { "type": ["null", "string"] },
+        "TrackingCategoryID": { "type": ["string"] }
       }
     }
   },
