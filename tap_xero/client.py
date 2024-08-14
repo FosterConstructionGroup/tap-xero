@@ -1,3 +1,4 @@
+import singer
 import os
 import re
 import json
@@ -12,14 +13,17 @@ import pytz
 BASE_URL = "https://api.xero.com/api.xro/2.0"
 
 refresh_token_path = os.path.join(os.path.dirname(__file__), "refresh_token.secret")
+logger = singer.get_logger()
 
 
 def get_token(config):
     # fall back to the refresh token in config on failure (which will be the first time it runs, or if it expires)
     try:
         with open(refresh_token_path) as f:
-            refresh_token = f.read()
+            refresh_token = f.read().replace("\n, "")
+            # logger.info(f"refresh token is {refresh_token}")
     except:
+        logger.info("falling back to config refresh token")
         refresh_token = config["refresh_token"]
 
     url = "https://identity.xero.com/connect/token"
