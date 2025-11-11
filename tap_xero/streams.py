@@ -261,10 +261,8 @@ all_streams = [
         "bank_transfers", ["BankTransferID"], bookmark_key="CreatedDateUTC"
     ),
     BookmarkedStream("employees", ["EmployeeID"]),
-    BookmarkedStream("expense_claims", ["ExpenseClaimID"]),
     BookmarkedStream("items", ["ItemID"]),
     BookmarkedStream("payments", ["PaymentID"]),
-    BookmarkedStream("receipts", ["ReceiptID"], format_fn=transform.format_receipts),
     BookmarkedStream("users", ["UserID"], format_fn=transform.format_users),
     # PULL EVERYTHING STREAMS
     # These endpoints do not support the Modified After header (or paging), so
@@ -297,7 +295,6 @@ all_streams = [
     SubStream("overpayments_lines"),
     SubStream("prepayments_lines"),
     SubStream("purchase_orders_lines"),
-    SubStream("receipts_lines"),
     SubStream("repeating_invoices_lines"),
 ]
 all_stream_ids = [s.tap_stream_id for s in all_streams]
