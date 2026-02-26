@@ -20,7 +20,7 @@ def get_token(config):
     # fall back to the refresh token in config on failure (which will be the first time it runs, or if it expires)
     try:
         with open(refresh_token_path) as f:
-            refresh_token = f.read().replace("\n, "")
+            refresh_token = f.read().replace("\n", "")
             # logger.info(f"refresh token is {refresh_token}")
     except:
         logger.info("falling back to config refresh token")
