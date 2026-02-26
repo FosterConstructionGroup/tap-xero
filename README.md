@@ -16,7 +16,6 @@ This tap:
   - [Overpayments](https://developer.xero.com/documentation/api/overpayments)
   - [Prepayments](https://developer.xero.com/documentation/api/prepayments)
   - [Purchase Orders](https://developer.xero.com/documentation/api/purchase-orders)
-  - [Journals](https://developer.xero.com/documentation/api/journals)
   - [Accounts](https://developer.xero.com/documentation/api/accounts)
   - [Bank Transfers](https://developer.xero.com/documentation/api/bank-transfers)
   - [Employees](https://developer.xero.com/documentation/api/employees)

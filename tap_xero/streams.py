@@ -139,42 +139,6 @@ class PaginatedStream(Stream):
         ctx.write_state()
 
 
-class Journals(Stream):
-    """The Journals endpoint is a special case. It has its own way of ordering
-    and paging the data. See
-    https://developer.xero.com/documentation/api/journals"""
-
-    def sync(self, ctx, sub=None):
-        bookmark = [self.tap_stream_id, self.bookmark_key]
-        journal_number = ctx.get_bookmark(bookmark) or 0
-        while True:
-            filter_options = {"offset": journal_number}
-            records = _make_request(ctx, self.tap_stream_id, filter_options)
-            if records:
-                self.format_fn(records)
-                self.write_records(records, ctx)
-                if sub:
-                    rows = [
-                        {
-                            **row,
-                            "JournalID": parent["JournalID"],
-                            # Have to JSON-encode so linebreaks aren't stripped out by Redshift loader
-                            "Description": json.dumps(row.get("Description")),
-                            "Tracking": row["TrackingCategories"][0]
-                            if row["TrackingCategories"]
-                            else None,
-                        }
-                        for parent in records
-                        for row in parent["JournalLines"]
-                    ]
-                    sub.write_records(rows, ctx)
-                journal_number = max((record[self.bookmark_key] for record in records))
-                ctx.set_bookmark(bookmark, journal_number)
-                ctx.write_state()
-            if not records or len(records) < FULL_PAGE_SIZE:
-                break
-
-
 class LinkedTransactions(Stream):
     """The Linked Transactions endpoint is a special case. It supports
     pagination, but not the Modified At header, but the objects returned have
@@ -245,14 +209,6 @@ all_streams = [
     PaginatedStream("overpayments", ["OverpaymentID"]),
     PaginatedStream("prepayments", ["PrepaymentID"]),
     PaginatedStream("purchase_orders", ["PurchaseOrderID"]),
-    # JOURNALS STREAM
-    # This endpoint is paginated, but in its own special snowflake way.
-    Journals(
-        "journals",
-        ["JournalID"],
-        bookmark_key="JournalNumber",
-        format_fn=transform.format_journals,
-    ),
     # NON-PAGINATED STREAMS
     # These endpoints do not support pagination, but do support the Modified At
     # header.
@@ -290,7 +246,6 @@ all_streams = [
     SubStream("bank_transactions_lines"),
     SubStream("credit_notes_lines"),
     SubStream("invoices_lines"),
-    SubStream("journals_lines"),
     SubStream("manual_journals_lines"),
     SubStream("overpayments_lines"),
     SubStream("prepayments_lines"),
